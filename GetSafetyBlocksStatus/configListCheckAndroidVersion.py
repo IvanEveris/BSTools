@@ -7,20 +7,22 @@ import json
 from collections import defaultdict
 #servers
 CONST_IP_SERVER_DEV="172.18.43.33"
+CONST_IP_SERVER_PRE="172.18.43.20"
 
-#SETTINGS
+#SETTINGS - change it to tune
 #user agent header http connection version code
 arg_version_codigo_user_agent="17.5.0"
 #version code
 arg_version_codigo="1750"
 #server API address
-arg_server_ip=CONST_IP_SERVER_DEV
+arg_server_ip=CONST_IP_SERVER_PRE
 
 with open("androidVersionList.txt") as f: 
 	for line in f: 
 		android_versions = f.read().splitlines()
 
 #OUTPUT HEADER
+print("Servidor %s" % (arg_server_ip))
 print("Desarrollo %s" % (arg_version_codigo))
 print("Version\tEstado")
 	
@@ -34,6 +36,8 @@ for version in android_versions:
 	'content-type': "application/json",
 	'user-agent': "ANDROID %s Android+SDK+built+for+x86 NATIVE_APP %s STANDARD" % (version,arg_version_codigo_user_agent), 
 	'cache-control': "no-cache"} 
+	
+	#print(headers)
 
   #service and url 
 	conn.request("GET", "/bsmobil/api/safeblocks/configurationlist", headers=headers)
