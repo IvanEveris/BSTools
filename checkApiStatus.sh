@@ -1,0 +1,3 @@
+errorApi=`curl -s -X GET   http://172.18.43.33:58380/bsmobil/api/status   -H 'accept: application/vnd.idk.bsmobil-v1752+json'   -H 'accept-language: es'   -H 'cache-control: no-cache'   -H 'content-type: application/json'   -H 'postman-token: fb75a9c7-e566-462f-c7a2-2b1aab0e410b' | grep -i error| wc -l | tr -s " " `
+if [ $errorApi -ne 0 ]; 
+then osascript -e ' display notification "Error en api" with title "Alert API"'; fi
