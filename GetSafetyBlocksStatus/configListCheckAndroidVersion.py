@@ -5,16 +5,24 @@ Check by configurationlist services the current
 import http.client 
 import json 
 from collections import defaultdict
+#servers
 CONST_IP_SERVER_DEV="172.18.43.33"
-arg_version_codigo="1752"
+
+#SETTINGS
+#user agent header http connection version code
+arg_version_codigo_user_agent="17.5.0"
+#version code
+arg_version_codigo="1750"
+#server API address
 arg_server_ip=CONST_IP_SERVER_DEV
 
 with open("androidVersionList.txt") as f: 
 	for line in f: 
 		android_versions = f.read().splitlines()
 
+#OUTPUT HEADER
 print("Desarrollo %s" % (arg_version_codigo))
-print("Version\tModulo\tEstado")
+print("Version\tEstado")
 	
 for version in android_versions:
 
@@ -24,9 +32,8 @@ for version in android_versions:
 	headers = { 'accept-language': "es", 
 	'accept': 'application/vnd.idk.bsmobil-v%s+json' % (arg_version_codigo), 
 	'content-type': "application/json",
-	'user-agent': "ANDROID %s Android+SDK+built+for+x86 NATIVE_APP 17.5.0 STANDARD" % (version), 
-	'cache-control': "no-cache", 
-	'postman-token': "c367fe30-7b86-0d2f-b688-b50475c6ca54" } 
+	'user-agent': "ANDROID %s Android+SDK+built+for+x86 NATIVE_APP %s STANDARD" % (version,arg_version_codigo_user_agent), 
+	'cache-control': "no-cache"} 
 
   #service and url 
 	conn.request("GET", "/bsmobil/api/safeblocks/configurationlist", headers=headers)
