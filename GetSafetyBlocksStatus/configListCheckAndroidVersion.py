@@ -11,10 +11,11 @@ CONST_IP_SERVER_PRE="172.18.43.20"
 
 #SETTINGS - change it to tune
 #user agent header http connection version code
-arg_version_codigo_user_agent="17.5.0"
+arg_version_codigo_user_agent="17.6.0"
 #version code
-arg_version_codigo="1750"
+arg_version_codigo="1760"
 #server API address
+arg_server_ip=CONST_IP_SERVER_DEV
 arg_server_ip=CONST_IP_SERVER_PRE
 
 with open("androidVersionList.txt") as f: 
@@ -48,27 +49,32 @@ for version in android_versions:
 	#check for eror response
 	output_response=data.decode("utf-8") 
 	if output_response.count('Error') > 0:
-		quit()
+		print("Error connection query for %s" % (version))
+		continue
 		
 	#parse json data string to object
 	response=json.loads(data)
+	#print(response)
 	
   #create a key pair empty
 	block_struct = defaultdict(lambda : None)
 	
   #load blocks name and status to block_struct
+  
 	for block in response["blocks"]: 
 		block_name=block["name"	]
 		status=block["status"]
 		block_struct[block_name]=status
 		
   #OUTPUT results
-	for block in block_struct:
-		if status == "0":
-			status_str="Activado"
-		else:
-			status_str="Desactivado"
-		#print("%s\t%s\t%s" % (version,block_name,status_str))
-		print("%s\t%s" % (version,status_str))
+	if(len(response["blocks"]) == 0):
+		print("%s\thas empty blocks" % (version))
+	else:
+		for block in block_struct:
+			if status == "0":
+				status_str="Activado"
+			else:
+				status_str="Desactivado"
+			print("%s\t%s" % (version,status_str))
 		
 	
