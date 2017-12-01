@@ -14,20 +14,23 @@ CONST_IP_SERVER_DEV="172.18.43.33"
 CONST_DESCR_SERVER_PRE="Pre-production"
 CONST_IP_SERVER_PRE="172.18.43.20"
 
-#SETTINGS - change it to tune
-#user agent header http connection version code
-arg_version_codigo_user_agent="17.5.0"
-#version code
-arg_version_codigo= arg_version_codigo_user_agent.replace(".", "")
-#server API address
-arg_server_ip=CONST_IP_SERVER_PRE
 
 parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter)
 parser.add_argument("--file", "-f", type=str, required=True,
                     help='List of android versions to check (one per line)')
 parser.add_argument("--server", "-s", type=str, required=True,
                     help='Server IP\n\tDEV: development server\n\tPRE: pre-production server.')
+parser.add_argument( "-vapp", type=str, required=True,
+                    help='App version. e.g.: 17.5.0, 17.6.0, etc.')
 args = parser.parse_args()
+
+#SETTINGS - change it to tune
+#user agent header http connection version code
+arg_version_codigo_user_agent=args.vapp
+#version code
+arg_version_codigo= arg_version_codigo_user_agent.replace(".", "")
+#server API address
+arg_server_ip=CONST_IP_SERVER_PRE
 
 if args.server=="DEV":
 	arg_server_description=CONST_DESCR_SERVER_DEV
