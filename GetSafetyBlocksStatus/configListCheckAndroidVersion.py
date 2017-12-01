@@ -4,31 +4,47 @@ Check by configurationlist services the current
 '''
 import http.client 
 import json 
+import argparse
+from argparse import RawTextHelpFormatter
 from collections import defaultdict
+
 #servers
+CONST_DESCR_SERVER_DEV="Development"
 CONST_IP_SERVER_DEV="172.18.43.33"
+CONST_DESCR_SERVER_PRE="Pre-production"
 CONST_IP_SERVER_PRE="172.18.43.20"
 
 #SETTINGS - change it to tune
 #user agent header http connection version code
-arg_version_codigo_user_agent="17.6.0"
+arg_version_codigo_user_agent="17.5.0"
 #version code
-arg_version_codigo="1760"
+arg_version_codigo= arg_version_codigo_user_agent.replace(".", "")
 #server API address
-arg_server_ip=CONST_IP_SERVER_DEV
 arg_server_ip=CONST_IP_SERVER_PRE
 
-with open("androidVersionList.txt") as f: 
-	for line in f: 
-		android_versions = f.read().splitlines()
+parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter)
+parser.add_argument("--file", "-f", type=str, required=True,
+                    help='List of android versions to check (one per line)')
+parser.add_argument("--server", "-s", type=str, required=True,
+                    help='Server IP\n\tDEV: development server\n\tPRE: pre-production server.')
+args = parser.parse_args()
+
+if args.server=="DEV":
+	arg_server_description=CONST_DESCR_SERVER_DEV
+	arg_server_ip=CONST_IP_SERVER_DEV
+elif args.server=="PRE":
+	arg_server_description=CONST_DESCR_SERVER_PRE
+	arg_server_ip=CONST_IP_SERVER_PRE
+
+with open(args.file) as f: 
+	android_versions = f.read().splitlines()
 
 #OUTPUT HEADER
-print("Servidor %s" % (arg_server_ip))
+print("Servidor %s" % (arg_server_description))
 print("Desarrollo %s" % (arg_version_codigo))
 print("Version\tEstado")
 	
 for version in android_versions:
-
   #init connection
 	conn = http.client.HTTPConnection("%s:58380" % (arg_server_ip))
 	
